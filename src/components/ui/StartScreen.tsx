@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
-import { useGameStore } from '../../stores/gameStore';
+import { motion } from "framer-motion";
+import { useGameStore } from "../../stores/gameStore";
 
 export function StartScreen() {
   const { isPlaying, startGame } = useGameStore();
@@ -13,21 +13,22 @@ export function StartScreen() {
       exit={{ opacity: 0 }}
       className="absolute inset-0 flex flex-col items-center justify-center z-50"
       style={{
-        background: 'radial-gradient(ellipse at center, rgba(10, 22, 40, 0.9) 0%, rgba(5, 10, 20, 0.98) 100%)',
+        background:
+          "radial-gradient(ellipse at center, rgba(10, 22, 40, 0.9) 0%, rgba(5, 10, 20, 0.98) 100%)",
       }}
     >
       {/* Animated title */}
       <motion.div
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.2, duration: 0.8, ease: 'easeOut' }}
+        transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
         className="text-center mb-12"
       >
         <h1
           className="text-6xl md:text-8xl font-bold tracking-wider mb-4"
           style={{
             fontFamily: "'Orbitron', sans-serif",
-            color: '#00ffff',
+            color: "#00ffff",
             textShadow: `
               0 0 10px #00ffff,
               0 0 20px #00ffff,
@@ -42,7 +43,7 @@ export function StartScreen() {
           className="text-3xl md:text-5xl font-bold tracking-widest"
           style={{
             fontFamily: "'Orbitron', sans-serif",
-            color: '#ff6b35',
+            color: "#ff6b35",
             textShadow: `
               0 0 10px #ff6b35,
               0 0 20px #ff6b35,
@@ -62,7 +63,8 @@ export function StartScreen() {
         className="text-lg md:text-xl text-gray-300 mb-8 text-center px-4"
         style={{ fontFamily: "'Rajdhani', sans-serif" }}
       >
-        Shoot the enemy planes to discover my work experience
+        Hey! I'm Tiago Suzukayama, Software Engineer. Shoot the enemy planes to
+        discover my work experience!
       </motion.p>
 
       {/* Controls info */}
@@ -70,14 +72,18 @@ export function StartScreen() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8, duration: 0.5 }}
-        className="flex flex-wrap justify-center gap-4 mb-12 text-sm md:text-base"
+        className="flex flex-wrap justify-center space-4 mb-12 text-sm md:text-base gap-4"
       >
         <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-lg backdrop-blur-sm">
-          <kbd className="px-2 py-1 bg-gray-700 rounded text-white font-mono">W A S D</kbd>
+          <kbd className="px-2 py-1 bg-gray-700 rounded text-white font-mono">
+            W A S D
+          </kbd>
           <span className="text-gray-300">Move</span>
         </div>
         <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-lg backdrop-blur-sm">
-          <kbd className="px-2 py-1 bg-gray-700 rounded text-white font-mono">SPACE</kbd>
+          <kbd className="px-2 py-1 bg-gray-700 rounded text-white font-mono">
+            SPACE
+          </kbd>
           <span className="text-gray-300">Shoot</span>
         </div>
       </motion.div>
@@ -116,7 +122,7 @@ export function StartScreen() {
         transition={{
           duration: 3,
           repeat: Infinity,
-          ease: 'easeInOut',
+          ease: "easeInOut",
         }}
       >
         ✈️
@@ -130,7 +136,7 @@ export function StartScreen() {
         transition={{
           duration: 4,
           repeat: Infinity,
-          ease: 'easeInOut',
+          ease: "easeInOut",
           delay: 0.5,
         }}
       >
@@ -139,4 +145,3 @@ export function StartScreen() {
     </motion.div>
   );
 }
-
