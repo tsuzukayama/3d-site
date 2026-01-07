@@ -1,6 +1,6 @@
-import { create } from 'zustand';
-import type { Experience } from '../data/experiences';
-import { experiences } from '../data/experiences';
+import { create } from "zustand";
+import type { Experience } from "../data/experiences";
+import { experiences } from "../data/experiences";
 
 export type Bullet = {
   id: string;
@@ -69,18 +69,19 @@ export const useGameStore = create<GameState>((set, get) => ({
   explosions: [],
 
   // Actions
-  startGame: () => set({
-    isPlaying: true,
-    isPaused: false,
-    score: 0,
-    gameTime: 0,
-    bullets: [],
-    enemies: [],
-    spawnedCount: 0,
-    selectedExperience: null,
-    explosions: [],
-    playerPosition: [0, -3, 0],
-  }),
+  startGame: () =>
+    set({
+      isPlaying: true,
+      isPaused: false,
+      score: 0,
+      gameTime: 0,
+      bullets: [],
+      enemies: [],
+      spawnedCount: 0,
+      selectedExperience: null,
+      explosions: [],
+      playerPosition: [0, -3, 0],
+    }),
 
   pauseGame: () => set({ isPaused: true }),
 
@@ -88,23 +89,25 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   setPlayerPosition: (pos) => set({ playerPosition: pos }),
 
-  addBullet: (bullet) => set((state) => ({
-    bullets: [...state.bullets, bullet],
-  })),
+  addBullet: (bullet) =>
+    set((state) => ({
+      bullets: [...state.bullets, bullet],
+    })),
 
-  removeBullet: (id) => set((state) => ({
-    bullets: state.bullets.filter((b) => b.id !== id),
-  })),
+  removeBullet: (id) =>
+    set((state) => ({
+      bullets: state.bullets.filter((b) => b.id !== id),
+    })),
 
   spawnEnemy: () => {
     const state = get();
-    if (state.spawnedCount >= experiences.length) return;
-
-    const exp = experiences[state.spawnedCount];
+    // Loop through experiences infinitely using modulo
+    const expIndex = state.spawnedCount % experiences.length;
+    const exp = experiences[expIndex];
     const xPos = (Math.random() - 0.5) * 6;
 
     const newEnemy: Enemy = {
-      id: `enemy-${Date.now()}`,
+      id: `enemy-${Date.now()}-${state.spawnedCount}`,
       experience: exp,
       position: [xPos, 6, 0],
       isHit: false,
@@ -116,54 +119,60 @@ export const useGameStore = create<GameState>((set, get) => ({
     }));
   },
 
-  hitEnemy: (id) => set((state) => ({
-    enemies: state.enemies.map((e) =>
-      e.id === id ? { ...e, isHit: true } : e
-    ),
-    score: state.score + 100,
-  })),
+  hitEnemy: (id) =>
+    set((state) => ({
+      enemies: state.enemies.map((e) =>
+        e.id === id ? { ...e, isHit: true } : e
+      ),
+      score: state.score + 100,
+    })),
 
-  setSelectedExperience: (exp) => set({
-    selectedExperience: exp,
-    isPaused: exp !== null,
-  }),
+  setSelectedExperience: (exp) =>
+    set({
+      selectedExperience: exp,
+      isPaused: exp !== null,
+    }),
 
-  addExplosion: (position) => set((state) => ({
-    explosions: [...state.explosions, { id: `exp-${Date.now()}`, position }],
-  })),
+  addExplosion: (position) =>
+    set((state) => ({
+      explosions: [...state.explosions, { id: `exp-${Date.now()}`, position }],
+    })),
 
-  removeExplosion: (id) => set((state) => ({
-    explosions: state.explosions.filter((e) => e.id !== id),
-  })),
+  removeExplosion: (id) =>
+    set((state) => ({
+      explosions: state.explosions.filter((e) => e.id !== id),
+    })),
 
-  updateGameTime: (delta) => set((state) => ({
-    gameTime: state.gameTime + delta,
-  })),
+  updateGameTime: (delta) =>
+    set((state) => ({
+      gameTime: state.gameTime + delta,
+    })),
 
-  updateEnemyPositions: (delta) => set((state) => ({
-    enemies: state.enemies
-      .map((enemy) => ({
-        ...enemy,
-        position: [
-          enemy.position[0],
-          enemy.position[1] - delta * 1.5,
-          enemy.position[2],
-        ] as [number, number, number],
-      }))
-      .filter((enemy) => enemy.position[1] > -8),
-  })),
+  updateEnemyPositions: (delta) =>
+    set((state) => ({
+      enemies: state.enemies
+        .map((enemy) => ({
+          ...enemy,
+          position: [
+            enemy.position[0],
+            enemy.position[1] - delta * 1.5,
+            enemy.position[2],
+          ] as [number, number, number],
+        }))
+        .filter((enemy) => enemy.position[1] > -8),
+    })),
 
-  updateBulletPositions: (delta) => set((state) => ({
-    bullets: state.bullets
-      .map((bullet) => ({
-        ...bullet,
-        position: [
-          bullet.position[0],
-          bullet.position[1] + delta * 15,
-          bullet.position[2],
-        ] as [number, number, number],
-      }))
-      .filter((bullet) => bullet.position[1] < 10),
-  })),
+  updateBulletPositions: (delta) =>
+    set((state) => ({
+      bullets: state.bullets
+        .map((bullet) => ({
+          ...bullet,
+          position: [
+            bullet.position[0],
+            bullet.position[1] + delta * 15,
+            bullet.position[2],
+          ] as [number, number, number],
+        }))
+        .filter((bullet) => bullet.position[1] < 10),
+    })),
 }));
-

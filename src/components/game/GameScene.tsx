@@ -37,8 +37,8 @@ function GameLogic() {
     // Update game time
     updateGameTime(delta);
 
-    // Spawn enemies
-    if (gameTime - lastSpawnTime.current > SPAWN_INTERVAL && spawnedCount < 4) {
+    // Spawn enemies infinitely
+    if (gameTime - lastSpawnTime.current > SPAWN_INTERVAL) {
       spawnEnemy();
       lastSpawnTime.current = gameTime;
     }

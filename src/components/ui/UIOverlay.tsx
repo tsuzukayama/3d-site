@@ -26,9 +26,9 @@ export function UIOverlay() {
           className="bg-black/50 backdrop-blur-sm rounded-lg px-4 py-2 border border-orange-500/30"
           style={{ fontFamily: "'Rajdhani', sans-serif" }}
         >
-          <div className="text-orange-400 text-xs uppercase tracking-wider">Experiences</div>
+          <div className="text-orange-400 text-xs uppercase tracking-wider">Wave</div>
           <div className="text-xl font-bold text-white">
-            {Math.min(spawnedCount, experiences.length)} / {experiences.length}
+            {Math.floor(spawnedCount / experiences.length) + 1}
           </div>
         </div>
       </div>
@@ -51,19 +51,26 @@ export function UIOverlay() {
         </div>
       </div>
 
-      {/* Radar/minimap style decoration */}
+      {/* Radar/minimap style decoration - shows current position in the loop */}
       <div className="absolute top-4 left-1/2 transform -translate-x-1/2">
         <div className="flex gap-1">
-          {experiences.map((_, i) => (
-            <div
-              key={i}
-              className={`w-3 h-3 rounded-full border-2 transition-all duration-300 ${
-                i < spawnedCount
-                  ? 'bg-cyan-500 border-cyan-400 shadow-lg shadow-cyan-500/50'
-                  : 'bg-transparent border-gray-600'
-              }`}
-            />
-          ))}
+          {experiences.map((_, i) => {
+            const currentIndex = spawnedCount % experiences.length;
+            const isActive = i === currentIndex;
+            const isPast = i < currentIndex || spawnedCount >= experiences.length;
+            return (
+              <div
+                key={i}
+                className={`w-3 h-3 rounded-full border-2 transition-all duration-300 ${
+                  isActive
+                    ? 'bg-orange-500 border-orange-400 shadow-lg shadow-orange-500/50 scale-125'
+                    : isPast
+                    ? 'bg-cyan-500 border-cyan-400 shadow-lg shadow-cyan-500/50'
+                    : 'bg-transparent border-gray-600'
+                }`}
+              />
+            );
+          })}
         </div>
       </div>
     </div>
