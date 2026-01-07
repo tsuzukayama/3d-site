@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Orbitron', 'Rajdhani', system-ui, -apple-system, sans-serif;
+  background: #0a0a1a;
+}
+
+/* Retro arcade scanlines effect */
+.scanlines::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.1) 0px,
+    rgba(0, 0, 0, 0.1) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* Retro glow text */
+.glow-text {
+  text-shadow: 
+    0 0 5px currentColor,
+    0 0 10px currentColor,
+    0 0 20px currentColor;
+}
+
+/* Arcade button style */
+.arcade-btn {
+  background: linear-gradient(180deg, #ff6b35 0%, #cc4411 100%);
+  border: 3px solid #ffaa00;
+  box-shadow: 
+    0 4px 0 #993300,
+    0 0 20px rgba(255, 107, 53, 0.5);
+  transition: all 0.1s ease;
+}
+
+.arcade-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 6px 0 #993300,
+    0 0 30px rgba(255, 107, 53, 0.7);
+}
+
+.arcade-btn:active {
+  transform: translateY(2px);
+  box-shadow: 
+    0 2px 0 #993300,
+    0 0 15px rgba(255, 107, 53, 0.4);
+}
