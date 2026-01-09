@@ -155,7 +155,7 @@ export const useGameStore = create<GameState>((set, get) => ({
           ...enemy,
           position: [
             enemy.position[0],
-            enemy.position[1] - delta * 1.5,
+            enemy.position[1] - delta * 2,
             enemy.position[2],
           ] as [number, number, number],
         }))

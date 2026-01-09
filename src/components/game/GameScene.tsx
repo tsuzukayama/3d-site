@@ -1,15 +1,15 @@
-import { useRef, useEffect } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
-import * as THREE from 'three';
-import { PlayerPlane } from './PlayerPlane';
-import { EnemyPlane } from './EnemyPlane';
-import { Bullet } from './Bullet';
-import { Explosion } from './Explosion';
-import { ScrollingBackground } from './ScrollingBackground';
-import { useGameStore } from '../../stores/gameStore';
+import { useRef, useEffect } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
+import * as THREE from "three";
+import { PlayerPlane } from "./PlayerPlane";
+import { EnemyPlane } from "./EnemyPlane";
+import { Bullet } from "./Bullet";
+import { Explosion } from "./Explosion";
+import { ScrollingBackground } from "./ScrollingBackground";
+import { useGameStore } from "../../stores/gameStore";
 
-const SPAWN_INTERVAL = 4; // seconds between spawns
+const SPAWN_INTERVAL = 2; // seconds between spawns
 const HIT_RADIUS = 0.8;
 
 function GameLogic() {
@@ -20,7 +20,6 @@ function GameLogic() {
     gameTime,
     bullets,
     enemies,
-    spawnedCount,
     updateGameTime,
     updateEnemyPositions,
     updateBulletPositions,
@@ -137,10 +136,11 @@ export function GameScene() {
   return (
     <Canvas
       camera={{ fov: 60, near: 0.1, far: 100, position: [0, 0, 10] }}
-      style={{ background: 'linear-gradient(180deg, #0a1628 0%, #1a2a4a 100%)' }}
+      style={{
+        background: "linear-gradient(180deg, #0a1628 0%, #1a2a4a 100%)",
+      }}
     >
       <Scene />
     </Canvas>
   );
 }
-
