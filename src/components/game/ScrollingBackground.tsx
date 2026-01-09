@@ -1,23 +1,29 @@
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
+import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
+// Preload the terrain model
+useGLTF.preload("/models/terrain.glb");
+
 // Create cloud positions
-const cloudPositions = Array.from({ length: 20 }, (_, i) => ({
+const cloudPositions = Array.from({ length: 15 }, (_, i) => ({
   x: (Math.random() - 0.5) * 12,
-  y: (i / 20) * 20 - 5,
-  z: -2 - Math.random() * 3,
-  scale: 0.3 + Math.random() * 0.5,
+  y: (i / 15) * 20 - 5,
+  z: -1 - Math.random() * 2,
+  scale: 0.2 + Math.random() * 0.3,
 }));
 
 export function ScrollingBackground() {
   const cloudsRef = useRef<THREE.Group>(null);
-  const oceanRef = useRef<THREE.Mesh>(null);
+  const terrainRef = useRef<THREE.Group>(null);
+  const { scene } = useGLTF("/models/terrain.glb");
 
   useFrame((_, delta) => {
+    // Animate clouds
     if (cloudsRef.current) {
       cloudsRef.current.children.forEach((cloud) => {
-        cloud.position.y -= delta * 1;
+        cloud.position.y -= delta * 0.8;
         if (cloud.position.y < -10) {
           cloud.position.y = 10;
           cloud.position.x = (Math.random() - 0.5) * 12;
@@ -25,73 +31,42 @@ export function ScrollingBackground() {
       });
     }
 
-    if (oceanRef.current) {
-      const material = oceanRef.current.material as THREE.ShaderMaterial;
-      if (material.uniforms) {
-        material.uniforms.uTime.value += delta;
+    // Scroll terrain downward for parallax effect
+    if (terrainRef.current) {
+      terrainRef.current.position.y -= delta * 1;
+      // Reset position for infinite scrolling
+      if (terrainRef.current.position.y < -30) {
+        terrainRef.current.position.y = 0;
       }
     }
   });
 
   return (
     <>
-      {/* Ocean/Ground plane */}
-      <mesh
-        ref={oceanRef}
-        rotation={[-Math.PI / 2, 0, 0]}
-        position={[0, -5, 0]}
-      >
-        <planeGeometry args={[50, 50, 32, 32]} />
-        <shaderMaterial
-          uniforms={{
-            uTime: { value: 0 },
-            uColor1: { value: new THREE.Color("#0a3d62") },
-            uColor2: { value: new THREE.Color("#1e5f8a") },
-          }}
-          vertexShader={`
-            uniform float uTime;
-            varying vec2 vUv;
-            varying float vWave;
-            
-            void main() {
-              vUv = uv;
-              vec3 pos = position;
-              float wave = sin(pos.x * 0.5 + uTime) * 0.3 + sin(pos.y * 0.3 + uTime * 0.7) * 0.2;
-              pos.z += wave;
-              vWave = wave;
-              gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-            }
-          `}
-          fragmentShader={`
-            uniform vec3 uColor1;
-            uniform vec3 uColor2;
-            varying vec2 vUv;
-            varying float vWave;
-            
-            void main() {
-              vec3 color = mix(uColor1, uColor2, vUv.y + vWave * 0.3);
-              gl_FragColor = vec4(color, 1.0);
-            }
-          `}
+      {/* Terrain background - scrolling ground */}
+      <group ref={terrainRef}>
+        {/* First terrain tile */}
+        <primitive
+          object={scene.clone()}
+          scale={50}
+          rotation={[0, 1, 1]}
+          position={[-35, -15, -2]}
         />
-      </mesh>
+        {/* Second terrain tile for seamless scrolling */}
+        <primitive
+          object={scene.clone()}
+          scale={50}
+          rotation={[0, 1, 1]}
+          position={[-35, 20, -2]}
+        />
+      </group>
 
-      {/* Clouds */}
+      {/* Clouds for atmosphere */}
       <group ref={cloudsRef}>
         {cloudPositions.map((pos, i) => (
           <Cloud key={i} position={[pos.x, pos.y, pos.z]} scale={pos.scale} />
         ))}
       </group>
-
-      {/* Distant islands/terrain for parallax */}
-      <mesh position={[-8, 0, -8]} rotation={[-Math.PI / 4, 0.3, 0]}>
-        <coneGeometry args={[2, 3, 6]} />
-        <meshStandardMaterial color="#2d5a3d" flatShading />
-      </mesh>
-      <mesh position={[9, -1, -10]} rotation={[-Math.PI / 4, -0.2, 0]}>
-        <coneGeometry args={[1.5, 2.5, 5]} />
-        <meshStandardMaterial color="#3d6a4d" flatShading />
-      </mesh>
     </>
   );
 }
@@ -110,7 +85,7 @@ function Cloud({
         <meshStandardMaterial
           color="#ffffff"
           transparent
-          opacity={0.8}
+          opacity={0.6}
           flatShading
         />
       </mesh>
@@ -119,7 +94,7 @@ function Cloud({
         <meshStandardMaterial
           color="#ffffff"
           transparent
-          opacity={0.8}
+          opacity={0.6}
           flatShading
         />
       </mesh>
@@ -128,7 +103,7 @@ function Cloud({
         <meshStandardMaterial
           color="#ffffff"
           transparent
-          opacity={0.8}
+          opacity={0.6}
           flatShading
         />
       </mesh>
